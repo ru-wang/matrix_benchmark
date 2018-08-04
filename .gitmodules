@@ -1,0 +1,3 @@
+[submodule "nonius"]
+	path = nonius
+	url = https://github.com/rmartinho/nonius.git
