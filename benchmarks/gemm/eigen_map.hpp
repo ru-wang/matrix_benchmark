@@ -33,7 +33,7 @@ struct gemm_eigen_map {
         Eigen::Map<const Eigen::Matrix<double, N, N>> A_wrap(A);
         Eigen::Map<Eigen::Matrix<double, N, N>> ATA_wrap(ATA);
         ATA_wrap.noalias() = A_wrap.transpose() * A_wrap;
-        return ATA_wrap.sum();
+        return ATA_wrap(0, 0);
     }
     Eigen::Matrix<double, N, N> _a_;
     Eigen::Matrix<double, N, N> _a_t_a_;
@@ -47,7 +47,7 @@ struct gemm_eigen_map<-1> {
         Eigen::Map<const Eigen::Matrix<double, -1, -1>> A_wrap(A, dims, dims);
         Eigen::Map<Eigen::Matrix<double, -1, -1>> ATA_wrap(ATA, dims, dims);
         ATA_wrap.noalias() = A_wrap.transpose() * A_wrap;
-        return ATA_wrap.sum();
+        return ATA_wrap(0, 0);
     }
     Eigen::Matrix<double, -1, -1> _a_;
     Eigen::Matrix<double, -1, -1> _a_t_a_;

@@ -20,7 +20,7 @@ struct gemm_arma_mat {
             : _a_(arma::mat::fixed<N, N>(A.data())) { }
     double impl(const arma::mat& A, arma::mat& ATA) {
         ATA = A.t() * A;
-        return arma::accu(ATA);
+        return ATA(0, 0);
     }
     arma::mat _a_;
     arma::mat _a_t_a_ = arma::mat::fixed<N, N>();

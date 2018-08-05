@@ -33,7 +33,7 @@ struct gemm_eigen_mat {
             const Eigen::Matrix<double, N, N>& A,
                   Eigen::Matrix<double, N, N>& ATA) {
         ATA.noalias() = A.transpose() * A;
-        return ATA.sum();
+        return ATA(0, 0);
     }
     Eigen::Matrix<double, N, N> _a_;
     Eigen::Matrix<double, N, N> _a_t_a_;
@@ -47,7 +47,7 @@ struct gemm_eigen_mat<-1> {
             const Eigen::Matrix<double, -1, -1>& A,
                   Eigen::Matrix<double, -1, -1>& ATA) {
         ATA.noalias() = A.transpose() * A;
-        return ATA.sum();
+        return ATA(0, 0);
     }
     Eigen::Matrix<double, -1, -1> _a_;
     Eigen::Matrix<double, -1, -1> _a_t_a_;
