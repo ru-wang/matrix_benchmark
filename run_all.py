@@ -11,16 +11,19 @@ bin_dir = os.path.abspath(rel_dir)
 verbose = False
 if len(sys.argv) > 2 and sys.argv[2] in ['-v', '--verbose']:
     verbose = True
+start = ''
+if len(sys.argv) > 3:
+    start = sys.argv[3]
 
 for fname in os.listdir(bin_dir):
     exe = bin_dir + '/' + fname
-    if os.path.isfile(exe) and os.access(exe, os.X_OK):
+    if fname.startswith(start) and os.path.isfile(exe) and os.access(exe, os.X_OK):
         title = fname.replace('_', ' ')            \
                      .replace('arma', 'Arma', 1)   \
                      .replace('eigen', 'Eigen', 1) \
                      .replace('vs', 'vs.', 1)
         title = re.sub(r'^([a-z]+)', lambda match: '['+match.group(1).upper()+']', title)
-        cmd = [exe, '-r', 'html', '-o', exe + '.html', '-t', title]
+        cmd = [exe, '-s', '300', '-r', 'html', '-o', exe + '.html', '-t', title]
         if verbose: cmd.append('-v')
 
         print('\n\033[0;32m' + '#'*len(title))
