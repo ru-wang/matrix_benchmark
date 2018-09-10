@@ -51,12 +51,12 @@ target_link_libraries(chol_arma_mat_vs_eigen_smap ${LIBRARIES})
 target_link_libraries(chol_arma_mat_vs_eigen_dmat ${LIBRARIES})
 target_link_libraries(chol_arma_mat_vs_eigen_dmap ${LIBRARIES})
 
-add_executable(traverse_foreach_vector_vs_unordered_map     ./container_benchmarks/traverse_foreach_vector_vs_unordered_map.cc)
-add_executable(traverse_by_id_vector_vs_unordered_map       ./container_benchmarks/traverse_by_id_vector_vs_unordered_map.cc)
-add_executable(traverse_by_iterator_vector_vs_unordered_map ./container_benchmarks/traverse_by_iterator_vector_vs_unordered_map.cc)
+add_executable(traverse_foreach     ./container_benchmarks/traverse_foreach.cc)
+add_executable(traverse_by_id       ./container_benchmarks/traverse_by_id.cc)
+add_executable(traverse_by_iterator ./container_benchmarks/traverse_by_iterator.cc)
 
-target_link_libraries(traverse_foreach_vector_vs_unordered_map     pthread)
-target_link_libraries(traverse_by_id_vector_vs_unordered_map       pthread)
-target_link_libraries(traverse_by_iterator_vector_vs_unordered_map pthread)
+target_link_libraries(traverse_foreach     pthread)
+target_link_libraries(traverse_by_id       pthread)
+target_link_libraries(traverse_by_iterator pthread)
 
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")

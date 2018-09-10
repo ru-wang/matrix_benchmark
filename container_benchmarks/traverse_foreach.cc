@@ -1,5 +1,6 @@
 #include "common_config.hpp"
 #include "vector_crud.hpp"
+#include "deque_crud.hpp"
 #include "unordered_map_crud.hpp"
 
 #ifndef VEC_FOR
@@ -11,6 +12,19 @@ NONIUS_BENCHMARK(STRING(VEC_FOR_##N),                \
     double sum;                                      \
     meter.measure([&vec_crud, &sum]                  \
             { sum = vec_crud.traverse_foreach(); }); \
+    std::cerr << sum;                                \
+})
+#endif
+
+#ifndef DEQ_FOR
+#define DEQ_FOR(N)                                   \
+NONIUS_BENCHMARK(STRING(DEQ_FOR_##N),                \
+        [](nonius::chronometer meter) {              \
+    deque_crud<double> deq_crud;                     \
+    deq_crud.emplace_n_element_at_a_time(N);         \
+    double sum;                                      \
+    meter.measure([&deq_crud, &sum]                  \
+            { sum = deq_crud.traverse_foreach(); }); \
     std::cerr << sum;                                \
 })
 #endif
@@ -41,6 +55,20 @@ VEC_FOR(3000)
 VEC_FOR(5000)
 VEC_FOR(8000)
 VEC_FOR(10000)
+
+DEQ_FOR(10)
+DEQ_FOR(30)
+DEQ_FOR(50)
+DEQ_FOR(100)
+DEQ_FOR(250)
+DEQ_FOR(500)
+DEQ_FOR(800)
+DEQ_FOR(1000)
+DEQ_FOR(1500)
+DEQ_FOR(3000)
+DEQ_FOR(5000)
+DEQ_FOR(8000)
+DEQ_FOR(10000)
 
 MAP_FOR(10)
 MAP_FOR(30)
