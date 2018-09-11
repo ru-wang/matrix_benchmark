@@ -1,6 +1,6 @@
 project(MatrixBenchmark)
 cmake_minimum_required(VERSION 3.5.1)
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=always -Wfatal-errors -Wall -Wno-sign-compare")
 set(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -g -ggdb")
 set(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -march=native")
@@ -50,6 +50,9 @@ target_link_libraries(chol_arma_mat_vs_eigen_smat ${LIBRARIES})
 target_link_libraries(chol_arma_mat_vs_eigen_smap ${LIBRARIES})
 target_link_libraries(chol_arma_mat_vs_eigen_dmat ${LIBRARIES})
 target_link_libraries(chol_arma_mat_vs_eigen_dmap ${LIBRARIES})
+
+add_executable(sparse_cholesky ./sparse_block_benchmarks/sparse_cholesky.cc)
+target_link_libraries(sparse_cholesky pthread)
 
 add_executable(traverse_foreach     ./container_benchmarks/traverse_foreach.cc)
 add_executable(traverse_by_id       ./container_benchmarks/traverse_by_id.cc)
