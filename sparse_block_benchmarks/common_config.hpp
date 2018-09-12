@@ -10,9 +10,6 @@
 
 #include <Eigen/Eigen>
 
-#define NONIUS_RUNNER
-#include <nonius/nonius_single.h++>
-
 #include "./inline.hpp"
 
 #ifndef STRING
