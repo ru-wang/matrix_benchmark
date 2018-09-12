@@ -63,26 +63,35 @@ NONIUS_BENCHMARK(STRING(CHOL_SBM_##N), [](nonius::chronometer meter) {         \
 #endif
 
 struct cholesky_solver {
-    cholesky_solver(const Eigen::MatrixXd& A) : ldlt(A) {
+    cholesky_solver(const Eigen::MatrixXd& A)
+            : ldlt(A) { run(); }
+    void run() {
+        using namespace Eigen;
         const int n = ldlt.rows();
-        for (int k = 0; k < n; ++k) {
-            const int rs_size = n - k - 1;
-            ldlt(k, k) = 1.0 / ldlt(k, k);
-            ldlt.row(k).tail(rs_size).noalias() =
-                    ldlt.col(k).tail(rs_size).transpose();
-            ldlt.col(k).tail(rs_size) *= ldlt(k, k);
-            for (int j = k + 1; j < n; ++j)
-                ldlt.col(j).tail(n-j).noalias() -=
-                        ldlt(k, j) * ldlt.col(k).tail(n-j);
+        if (n <= 0) return;
+        ldlt.col(0).tail(n-1) /= ldlt(0, 0);
+        VectorXd temp(n-1);
+        for (int k = 1; k < n; ++k) {
+            const int rs = n - k - 1;
+            Block<MatrixXd, Dynamic, 1> A21(ldlt, k+1, k, rs, 1);
+            Block<MatrixXd, 1, Dynamic> A10(ldlt, k, 0, 1, k);
+            Block<MatrixXd, Dynamic, Dynamic> A20(ldlt, k+1, 0, rs, k);
+            temp.head(k).noalias() = ldlt.diagonal().head(k).asDiagonal() * A10.transpose();
+            ldlt(k, k) -= (A10 * temp.head(k)).value();
+            if (rs > 0) {
+                A21.noalias() -= A20.lazyProduct(temp.head(k));
+                A21 /= ldlt(k, k);
+            }
         }
     }
-    void solve_inplace(Eigen::VectorXd& b) {
+    void solve_inplace(Eigen::VectorXd& b)
+    {
         const int n = ldlt.rows();
         for (int j = 1; j < n; ++j) {
             b.tail(n-j).noalias() -= b[j-1] * ldlt.col(j-1).tail(n-j);
-            b[j-1] *= ldlt(j-1, j-1);
+            b[j-1] /= ldlt(j-1, j-1);
         }
-        b[n-1] *= ldlt(n-1, n-1);
+        b[n-1] /= ldlt(n-1, n-1);
         for (int j = n - 2; j >= 0; --j)
             b.head(j+1).noalias() -= b[j+1] *
                     ldlt.row(j+1).head(j+1).transpose();
